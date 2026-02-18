@@ -53,12 +53,22 @@ trait ApiResponse
      */
     protected function paginatedResponse(
         mixed $data,
+        callable|string $callbackOrMessage = 'Success',
         string $message = 'Success'
     ): JsonResponse {
+        // Handle callback for transforming items
+        if (is_callable($callbackOrMessage)) {
+            $items = collect($data->items())->map($callbackOrMessage)->values();
+            $msg = $message;
+        } else {
+            $items = $data->items();
+            $msg = $callbackOrMessage;
+        }
+
         return response()->json([
             'success' => true,
-            'message' => $message,
-            'data' => $data->items(),
+            'message' => $msg,
+            'data' => $items,
             'meta' => [
                 'pagination' => [
                     'total' => $data->total(),

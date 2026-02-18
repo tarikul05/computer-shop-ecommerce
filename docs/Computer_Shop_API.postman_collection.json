@@ -1,0 +1,2990 @@
+{
+	"info": {
+		"_postman_id": "computer-shop-api-collection",
+		"name": "Computer Shop API",
+		"description": "Complete API collection for the Computer Shop e-commerce application (Like StarTech, Ryans). Built with Laravel 12.\n\n## Base URL\n- Local: http://localhost:8000/api/v1\n- Production: {{baseUrl}}/api/v1\n\n## Authentication\nThis API uses Laravel Sanctum for authentication. After login, you'll receive a Bearer token that should be included in the Authorization header for protected routes.\n\n## Default Test Users\n- Admin: admin@computerstore.com / password\n- Customer: rahim@example.com / password",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"variable": [
+		{
+			"key": "baseUrl",
+			"value": "http://localhost:8000",
+			"type": "string"
+		},
+		{
+			"key": "apiVersion",
+			"value": "v1",
+			"type": "string"
+		},
+		{
+			"key": "authToken",
+			"value": "",
+			"type": "string"
+		}
+	],
+	"item": [
+		{
+			"name": "Health Check",
+			"item": [
+				{
+					"name": "API Health Check",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{baseUrl}}/api/{{apiVersion}}/health",
+							"host": ["{{baseUrl}}"],
+							"path": ["api", "{{apiVersion}}", "health"]
+						},
+						"description": "Check if the API is running and healthy."
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Authentication",
+			"item": [
+				{
+					"name": "Register",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"var jsonData = pm.response.json();",
+									"if (jsonData.data && jsonData.data.token) {",
+									"    pm.collectionVariables.set('authToken', jsonData.data.token);",
+									"}"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Accept",
+								"value": "application/json"
+							},
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"name\": \"John Doe\",\n    \"email\": \"john@example.com\",\n    \"phone\": \"01712345678\",\n    \"password\": \"password123\",\n    \"password_confirmation\": \"password123\"\n}"
+						},
+						"url": {
+							"raw": "{{baseUrl}}/api/{{apiVersion}}/auth/register",
+							"host": ["{{baseUrl}}"],
+							"path": ["api", "{{apiVersion}}", "auth", "register"]
+						},
+						"description": "Register a new customer account."
+					},
+					"response": []
+				},
+				{
+					"name": "Login",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"var jsonData = pm.response.json();",
+									"if (jsonData.data && jsonData.data.token) {",
+									"    pm.collectionVariables.set('authToken', jsonData.data.token);",
+									"}"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Accept",
+								"value": "application/json"
+							},
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"email\": \"admin@computerstore.com\",\n    \"password\": \"password\"\n}"
+						},
+						"url": {
+							"raw": "{{baseUrl}}/api/{{apiVersion}}/auth/login",
+							"host": ["{{baseUrl}}"],
+							"path": ["api", "{{apiVersion}}", "auth", "login"]
+						},
+						"description": "Login to get authentication token.\n\nDefault users:\n- Admin: admin@computerstore.com / password\n- Customer: rahim@example.com / password"
+					},
+					"response": []
+				},
+				{
+					"name": "Forgot Password",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Accept",
+								"value": "application/json"
+							},
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"email\": \"user@example.com\"\n}"
+						},
+						"url": {
+							"raw": "{{baseUrl}}/api/{{apiVersion}}/auth/forgot-password",
+							"host": ["{{baseUrl}}"],
+							"path": ["api", "{{apiVersion}}", "auth", "forgot-password"]
+						},
+						"description": "Request a password reset link."
+					},
+					"response": []
+				},
+				{
+					"name": "Reset Password",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Accept",
+								"value": "application/json"
+							},
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"email\": \"user@example.com\",\n    \"token\": \"reset-token-here\",\n    \"password\": \"newpassword123\",\n    \"password_confirmation\": \"newpassword123\"\n}"
+						},
+						"url": {
+							"raw": "{{baseUrl}}/api/{{apiVersion}}/auth/reset-password",
+							"host": ["{{baseUrl}}"],
+							"path": ["api", "{{apiVersion}}", "auth", "reset-password"]
+						},
+						"description": "Reset password using the token received via email."
+					},
+					"response": []
+				},
+				{
+					"name": "Get Current User (Me)",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Accept",
+								"value": "application/json"
+							},
+							{
+								"key": "Authorization",
+								"value": "Bearer {{authToken}}"
+							}
+						],
+						"url": {
+							"raw": "{{baseUrl}}/api/{{apiVersion}}/auth/me",
+							"host": ["{{baseUrl}}"],
+							"path": ["api", "{{apiVersion}}", "auth", "me"]
+						},
+						"description": "Get the currently authenticated user's information."
+					},
+					"response": []
+				},
+				{
+					"name": "Refresh Token",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"var jsonData = pm.response.json();",
+									"if (jsonData.data && jsonData.data.token) {",
+									"    pm.collectionVariables.set('authToken', jsonData.data.token);",
+									"}"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Accept",
+								"value": "application/json"
+							},
+							{
+								"key": "Authorization",
+								"value": "Bearer {{authToken}}"
+							}
+						],
+						"url": {
+							"raw": "{{baseUrl}}/api/{{apiVersion}}/auth/refresh",
+							"host": ["{{baseUrl}}"],
+							"path": ["api", "{{apiVersion}}", "auth", "refresh"]
+						},
+						"description": "Refresh the authentication token."
+					},
+					"response": []
+				},
+				{
+					"name": "Logout",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Accept",
+								"value": "application/json"
+							},
+							{
+								"key": "Authorization",
+								"value": "Bearer {{authToken}}"
+							}
+						],
+						"url": {
+							"raw": "{{baseUrl}}/api/{{apiVersion}}/auth/logout",
+							"host": ["{{baseUrl}}"],
+							"path": ["api", "{{apiVersion}}", "auth", "logout"]
+						},
+						"description": "Logout and invalidate the current token."
+					},
+					"response": []
+				}
+			],
+			"description": "Authentication endpoints for user registration, login, logout, and password management."
+		},
+		{
+			"name": "User Profile",
+			"item": [
+				{
+					"name": "Get Profile",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Accept",
+								"value": "application/json"
+							},
+							{
+								"key": "Authorization",
+								"value": "Bearer {{authToken}}"
+							}
+						],
+						"url": {
+							"raw": "{{baseUrl}}/api/{{apiVersion}}/user/profile",
+							"host": ["{{baseUrl}}"],
+							"path": ["api", "{{apiVersion}}", "user", "profile"]
+						},
+						"description": "Get the current user's profile information."
+					},
+					"response": []
+				},
+				{
+					"name": "Update Profile",
+					"request": {
+						"method": "PUT",
+						"header": [
+							{
+								"key": "Accept",
+								"value": "application/json"
+							},
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							},
+							{
+								"key": "Authorization",
+								"value": "Bearer {{authToken}}"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"name\": \"Updated Name\",\n    \"phone\": \"01812345678\"\n}"
+						},
+						"url": {
+							"raw": "{{baseUrl}}/api/{{apiVersion}}/user/profile",
+							"host": ["{{baseUrl}}"],
+							"path": ["api", "{{apiVersion}}", "user", "profile"]
+						},
+						"description": "Update the current user's profile information."
+					},
+					"response": []
+				},
+				{
+					"name": "Update Password",
+					"request": {
+						"method": "PUT",
+						"header": [
+							{
+								"key": "Accept",
+								"value": "application/json"
+							},
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							},
+							{
+								"key": "Authorization",
+								"value": "Bearer {{authToken}}"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"current_password\": \"password\",\n    \"password\": \"newpassword123\",\n    \"password_confirmation\": \"newpassword123\"\n}"
+						},
+						"url": {
+							"raw": "{{baseUrl}}/api/{{apiVersion}}/user/password",
+							"host": ["{{baseUrl}}"],
+							"path": ["api", "{{apiVersion}}", "user", "password"]
+						},
+						"description": "Update the current user's password."
+					},
+					"response": []
+				},
+				{
+					"name": "Delete Account",
+					"request": {
+						"method": "DELETE",
+						"header": [
+							{
+								"key": "Accept",
+								"value": "application/json"
+							},
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							},
+							{
+								"key": "Authorization",
+								"value": "Bearer {{authToken}}"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"password\": \"password\"\n}"
+						},
+						"url": {
+							"raw": "{{baseUrl}}/api/{{apiVersion}}/user/account",
+							"host": ["{{baseUrl}}"],
+							"path": ["api", "{{apiVersion}}", "user", "account"]
+						},
+						"description": "Delete the current user's account. Requires password confirmation."
+					},
+					"response": []
+				}
+			],
+			"description": "User profile management endpoints."
+		},
+		{
+			"name": "Addresses",
+			"item": [
+				{
+					"name": "List Addresses",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Accept",
+								"value": "application/json"
+							},
+							{
+								"key": "Authorization",
+								"value": "Bearer {{authToken}}"
+							}
+						],
+						"url": {
+							"raw": "{{baseUrl}}/api/{{apiVersion}}/addresses",
+							"host": ["{{baseUrl}}"],
+							"path": ["api", "{{apiVersion}}", "addresses"]
+						},
+						"description": "Get all addresses for the current user."
+					},
+					"response": []
+				},
+				{
+					"name": "Create Address",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Accept",
+								"value": "application/json"
+							},
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							},
+							{
+								"key": "Authorization",
+								"value": "Bearer {{authToken}}"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"type\": \"shipping\",\n    \"name\": \"Home Address\",\n    \"phone\": \"01712345678\",\n    \"address_line_1\": \"House 123, Road 456\",\n    \"address_line_2\": \"Block B\",\n    \"city\": \"Dhaka\",\n    \"state\": \"Dhaka Division\",\n    \"postal_code\": \"1205\",\n    \"country\": \"Bangladesh\",\n    \"is_default\": true\n}"
+						},
+						"url": {
+							"raw": "{{baseUrl}}/api/{{apiVersion}}/addresses",
+							"host": ["{{baseUrl}}"],
+							"path": ["api", "{{apiVersion}}", "addresses"]
+						},
+						"description": "Create a new address."
+					},
+					"response": []
+				},
+				{
+					"name": "Get Address",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Accept",
+								"value": "application/json"
+							},
+							{
+								"key": "Authorization",
+								"value": "Bearer {{authToken}}"
+							}
+						],
+						"url": {
+							"raw": "{{baseUrl}}/api/{{apiVersion}}/addresses/1",
+							"host": ["{{baseUrl}}"],
+							"path": ["api", "{{apiVersion}}", "addresses", "1"]
+						},
+						"description": "Get a specific address by ID."
+					},
+					"response": []
+				},
+				{
+					"name": "Update Address",
+					"request": {
+						"method": "PUT",
+						"header": [
+							{
+								"key": "Accept",
+								"value": "application/json"
+							},
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							},
+							{
+								"key": "Authorization",
+								"value": "Bearer {{authToken}}"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"name\": \"Office Address\",\n    \"address_line_1\": \"Updated Address Line 1\"\n}"
+						},
+						"url": {
+							"raw": "{{baseUrl}}/api/{{apiVersion}}/addresses/1",
+							"host": ["{{baseUrl}}"],
+							"path": ["api", "{{apiVersion}}", "addresses", "1"]
+						},
+						"description": "Update an existing address."
+					},
+					"response": []
+				},
+				{
+					"name": "Delete Address",
+					"request": {
+						"method": "DELETE",
+						"header": [
+							{
+								"key": "Accept",
+								"value": "application/json"
+							},
+							{
+								"key": "Authorization",
+								"value": "Bearer {{authToken}}"
+							}
+						],
+						"url": {
+							"raw": "{{baseUrl}}/api/{{apiVersion}}/addresses/1",
+							"host": ["{{baseUrl}}"],
+							"path": ["api", "{{apiVersion}}", "addresses", "1"]
+						},
+						"description": "Delete an address."
+					},
+					"response": []
+				},
+				{
+					"name": "Set Default Address",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Accept",
+								"value": "application/json"
+							},
+							{
+								"key": "Authorization",
+								"value": "Bearer {{authToken}}"
+							}
+						],
+						"url": {
+							"raw": "{{baseUrl}}/api/{{apiVersion}}/addresses/1/default",
+							"host": ["{{baseUrl}}"],
+							"path": ["api", "{{apiVersion}}", "addresses", "1", "default"]
+						},
+						"description": "Set an address as the default."
+					},
+					"response": []
+				}
+			],
+			"description": "User address management endpoints."
+		},
+		{
+			"name": "Categories (Public)",
+			"item": [
+				{
+					"name": "List Categories",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Accept",
+								"value": "application/json"
+							}
+						],
+						"url": {
+							"raw": "{{baseUrl}}/api/{{apiVersion}}/categories?page=1&per_page=20",
+							"host": ["{{baseUrl}}"],
+							"path": ["api", "{{apiVersion}}", "categories"],
+							"query": [
+								{
+									"key": "page",
+									"value": "1"
+								},
+								{
+									"key": "per_page",
+									"value": "20"
+								}
+							]
+						},
+						"description": "Get paginated list of categories."
+					},
+					"response": []
+				},
+				{
+					"name": "Category Tree",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Accept",
+								"value": "application/json"
+							}
+						],
+						"url": {
+							"raw": "{{baseUrl}}/api/{{apiVersion}}/categories/tree",
+							"host": ["{{baseUrl}}"],
+							"path": ["api", "{{apiVersion}}", "categories", "tree"]
+						},
+						"description": "Get categories in a hierarchical tree structure."
+					},
+					"response": []
+				},
+				{
+					"name": "Featured Categories",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Accept",
+								"value": "application/json"
+							}
+						],
+						"url": {
+							"raw": "{{baseUrl}}/api/{{apiVersion}}/categories/featured",
+							"host": ["{{baseUrl}}"],
+							"path": ["api", "{{apiVersion}}", "categories", "featured"]
+						},
+						"description": "Get featured categories for homepage."
+					},
+					"response": []
+				},
+				{
+					"name": "Categories for Filter",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Accept",
+								"value": "application/json"
+							}
+						],
+						"url": {
+							"raw": "{{baseUrl}}/api/{{apiVersion}}/categories/filter",
+							"host": ["{{baseUrl}}"],
+							"path": ["api", "{{apiVersion}}", "categories", "filter"]
+						},
+						"description": "Get categories formatted for filter dropdowns."
+					},
+					"response": []
+				},
+				{
+					"name": "Get Category by Slug",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Accept",
+								"value": "application/json"
+							}
+						],
+						"url": {
+							"raw": "{{baseUrl}}/api/{{apiVersion}}/categories/desktop-pc",
+							"host": ["{{baseUrl}}"],
+							"path": ["api", "{{apiVersion}}", "categories", "desktop-pc"]
+						},
+						"description": "Get a specific category by its slug."
+					},
+					"response": []
+				}
+			],
+			"description": "Public category endpoints."
+		},
+		{
+			"name": "Brands (Public)",
+			"item": [
+				{
+					"name": "List Brands",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Accept",
+								"value": "application/json"
+							}
+						],
+						"url": {
+							"raw": "{{baseUrl}}/api/{{apiVersion}}/brands?page=1&per_page=20",
+							"host": ["{{baseUrl}}"],
+							"path": ["api", "{{apiVersion}}", "brands"],
+							"query": [
+								{
+									"key": "page",
+									"value": "1"
+								},
+								{
+									"key": "per_page",
+									"value": "20"
+								}
+							]
+						},
+						"description": "Get paginated list of brands."
+					},
+					"response": []
+				},
+				{
+					"name": "Featured Brands",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Accept",
+								"value": "application/json"
+							}
+						],
+						"url": {
+							"raw": "{{baseUrl}}/api/{{apiVersion}}/brands/featured",
+							"host": ["{{baseUrl}}"],
+							"path": ["api", "{{apiVersion}}", "brands", "featured"]
+						},
+						"description": "Get featured brands for homepage."
+					},
+					"response": []
+				},
+				{
+					"name": "Brands for Filter",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Accept",
+								"value": "application/json"
+							}
+						],
+						"url": {
+							"raw": "{{baseUrl}}/api/{{apiVersion}}/brands/filter",
+							"host": ["{{baseUrl}}"],
+							"path": ["api", "{{apiVersion}}", "brands", "filter"]
+						},
+						"description": "Get brands formatted for filter dropdowns."
+					},
+					"response": []
+				},
+				{
+					"name": "Get Brand by Slug",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Accept",
+								"value": "application/json"
+							}
+						],
+						"url": {
+							"raw": "{{baseUrl}}/api/{{apiVersion}}/brands/intel",
+							"host": ["{{baseUrl}}"],
+							"path": ["api", "{{apiVersion}}", "brands", "intel"]
+						},
+						"description": "Get a specific brand by its slug."
+					},
+					"response": []
+				}
+			],
+			"description": "Public brand endpoints."
+		},
+		{
+			"name": "Products (Public)",
+			"item": [
+				{
+					"name": "List Products",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Accept",
+								"value": "application/json"
+							}
+						],
+						"url": {
+							"raw": "{{baseUrl}}/api/{{apiVersion}}/products?page=1&per_page=20&category=&brand=&min_price=&max_price=&sort_by=created_at&sort_order=desc",
+							"host": ["{{baseUrl}}"],
+							"path": ["api", "{{apiVersion}}", "products"],
+							"query": [
+								{
+									"key": "page",
+									"value": "1"
+								},
+								{
+									"key": "per_page",
+									"value": "20"
+								},
+								{
+									"key": "category",
+									"value": "",
+									"description": "Category slug"
+								},
+								{
+									"key": "brand",
+									"value": "",
+									"description": "Brand slug"
+								},
+								{
+									"key": "min_price",
+									"value": "",
+									"description": "Minimum price"
+								},
+								{
+									"key": "max_price",
+									"value": "",
+									"description": "Maximum price"
+								},
+								{
+									"key": "sort_by",
+									"value": "created_at",
+									"description": "Sort field: price, name, created_at"
+								},
+								{
+									"key": "sort_order",
+									"value": "desc",
+									"description": "Sort order: asc, desc"
+								}
+							]
+						},
+						"description": "Get paginated list of products with optional filters."
+					},
+					"response": []
+				},
+				{
+					"name": "Featured Products",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Accept",
+								"value": "application/json"
+							}
+						],
+						"url": {
+							"raw": "{{baseUrl}}/api/{{apiVersion}}/products/featured?limit=10",
+							"host": ["{{baseUrl}}"],
+							"path": ["api", "{{apiVersion}}", "products", "featured"],
+							"query": [
+								{
+									"key": "limit",
+									"value": "10"
+								}
+							]
+						},
+						"description": "Get featured products for homepage."
+					},
+					"response": []
+				},
+				{
+					"name": "New Arrivals",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Accept",
+								"value": "application/json"
+							}
+						],
+						"url": {
+							"raw": "{{baseUrl}}/api/{{apiVersion}}/products/new-arrivals?limit=10",
+							"host": ["{{baseUrl}}"],
+							"path": ["api", "{{apiVersion}}", "products", "new-arrivals"],
+							"query": [
+								{
+									"key": "limit",
+									"value": "10"
+								}
+							]
+						},
+						"description": "Get newly added products."
+					},
+					"response": []
+				},
+				{
+					"name": "Best Sellers",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Accept",
+								"value": "application/json"
+							}
+						],
+						"url": {
+							"raw": "{{baseUrl}}/api/{{apiVersion}}/products/best-sellers?limit=10",
+							"host": ["{{baseUrl}}"],
+							"path": ["api", "{{apiVersion}}", "products", "best-sellers"],
+							"query": [
+								{
+									"key": "limit",
+									"value": "10"
+								}
+							]
+						},
+						"description": "Get best-selling products."
+					},
+					"response": []
+				},
+				{
+					"name": "Products On Sale",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Accept",
+								"value": "application/json"
+							}
+						],
+						"url": {
+							"raw": "{{baseUrl}}/api/{{apiVersion}}/products/on-sale?limit=10",
+							"host": ["{{baseUrl}}"],
+							"path": ["api", "{{apiVersion}}", "products", "on-sale"],
+							"query": [
+								{
+									"key": "limit",
+									"value": "10"
+								}
+							]
+						},
+						"description": "Get products currently on sale."
+					},
+					"response": []
+				},
+				{
+					"name": "Search Products",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Accept",
+								"value": "application/json"
+							}
+						],
+						"url": {
+							"raw": "{{baseUrl}}/api/{{apiVersion}}/products/search?q=intel&page=1&per_page=20",
+							"host": ["{{baseUrl}}"],
+							"path": ["api", "{{apiVersion}}", "products", "search"],
+							"query": [
+								{
+									"key": "q",
+									"value": "intel",
+									"description": "Search query"
+								},
+								{
+									"key": "page",
+									"value": "1"
+								},
+								{
+									"key": "per_page",
+									"value": "20"
+								}
+							]
+						},
+						"description": "Search products by name, description, or SKU."
+					},
+					"response": []
+				},
+				{
+					"name": "Filter Options",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Accept",
+								"value": "application/json"
+							}
+						],
+						"url": {
+							"raw": "{{baseUrl}}/api/{{apiVersion}}/products/filter-options?category=",
+							"host": ["{{baseUrl}}"],
+							"path": ["api", "{{apiVersion}}", "products", "filter-options"],
+							"query": [
+								{
+									"key": "category",
+									"value": "",
+									"description": "Optional category slug to get category-specific filter options"
+								}
+							]
+						},
+						"description": "Get available filter options (price range, brands, etc.) for products."
+					},
+					"response": []
+				},
+				{
+					"name": "Get Product by Slug",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Accept",
+								"value": "application/json"
+							}
+						],
+						"url": {
+							"raw": "{{baseUrl}}/api/{{apiVersion}}/products/intel-core-i9-13900k",
+							"host": ["{{baseUrl}}"],
+							"path": ["api", "{{apiVersion}}", "products", "intel-core-i9-13900k"]
+						},
+						"description": "Get a specific product by its slug with full details."
+					},
+					"response": []
+				},
+				{
+					"name": "Related Products",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Accept",
+								"value": "application/json"
+							}
+						],
+						"url": {
+							"raw": "{{baseUrl}}/api/{{apiVersion}}/products/intel-core-i9-13900k/related?limit=8",
+							"host": ["{{baseUrl}}"],
+							"path": ["api", "{{apiVersion}}", "products", "intel-core-i9-13900k", "related"],
+							"query": [
+								{
+									"key": "limit",
+									"value": "8"
+								}
+							]
+						},
+						"description": "Get related products for a specific product."
+					},
+					"response": []
+				}
+			],
+			"description": "Public product endpoints."
+		},
+		{
+			"name": "Reviews (Public)",
+			"item": [
+				{
+					"name": "Get Product Reviews",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Accept",
+								"value": "application/json"
+							}
+						],
+						"url": {
+							"raw": "{{baseUrl}}/api/{{apiVersion}}/products/1/reviews?page=1&per_page=10",
+							"host": ["{{baseUrl}}"],
+							"path": ["api", "{{apiVersion}}", "products", "1", "reviews"],
+							"query": [
+								{
+									"key": "page",
+									"value": "1"
+								},
+								{
+									"key": "per_page",
+									"value": "10"
+								}
+							]
+						},
+						"description": "Get reviews for a specific product."
+					},
+					"response": []
+				},
+				{
+					"name": "Product Rating Summary",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Accept",
+								"value": "application/json"
+							}
+						],
+						"url": {
+							"raw": "{{baseUrl}}/api/{{apiVersion}}/products/1/reviews/summary",
+							"host": ["{{baseUrl}}"],
+							"path": ["api", "{{apiVersion}}", "products", "1", "reviews", "summary"]
+						},
+						"description": "Get rating summary (average rating, rating distribution) for a product."
+					},
+					"response": []
+				}
+			],
+			"description": "Public review endpoints."
+		},
+		{
+			"name": "Reviews (Customer)",
+			"item": [
+				{
+					"name": "My Reviews",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Accept",
+								"value": "application/json"
+							},
+							{
+								"key": "Authorization",
+								"value": "Bearer {{authToken}}"
+							}
+						],
+						"url": {
+							"raw": "{{baseUrl}}/api/{{apiVersion}}/reviews/my?page=1&per_page=10",
+							"host": ["{{baseUrl}}"],
+							"path": ["api", "{{apiVersion}}", "reviews", "my"],
+							"query": [
+								{
+									"key": "page",
+									"value": "1"
+								},
+								{
+									"key": "per_page",
+									"value": "10"
+								}
+							]
+						},
+						"description": "Get all reviews written by the current user."
+					},
+					"response": []
+				},
+				{
+					"name": "Can Review Product",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Accept",
+								"value": "application/json"
+							},
+							{
+								"key": "Authorization",
+								"value": "Bearer {{authToken}}"
+							}
+						],
+						"url": {
+							"raw": "{{baseUrl}}/api/{{apiVersion}}/reviews/can-review/1",
+							"host": ["{{baseUrl}}"],
+							"path": ["api", "{{apiVersion}}", "reviews", "can-review", "1"]
+						},
+						"description": "Check if the current user can review a product (must have purchased it)."
+					},
+					"response": []
+				},
+				{
+					"name": "Create Review",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Accept",
+								"value": "application/json"
+							},
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							},
+							{
+								"key": "Authorization",
+								"value": "Bearer {{authToken}}"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"product_id\": 1,\n    \"rating\": 5,\n    \"title\": \"Great Product!\",\n    \"comment\": \"This product exceeded my expectations. Build quality is excellent.\"\n}"
+						},
+						"url": {
+							"raw": "{{baseUrl}}/api/{{apiVersion}}/reviews",
+							"host": ["{{baseUrl}}"],
+							"path": ["api", "{{apiVersion}}", "reviews"]
+						},
+						"description": "Create a new review for a product."
+					},
+					"response": []
+				},
+				{
+					"name": "Update Review",
+					"request": {
+						"method": "PUT",
+						"header": [
+							{
+								"key": "Accept",
+								"value": "application/json"
+							},
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							},
+							{
+								"key": "Authorization",
+								"value": "Bearer {{authToken}}"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"rating\": 4,\n    \"title\": \"Updated Review Title\",\n    \"comment\": \"Updated review comment.\"\n}"
+						},
+						"url": {
+							"raw": "{{baseUrl}}/api/{{apiVersion}}/reviews/1",
+							"host": ["{{baseUrl}}"],
+							"path": ["api", "{{apiVersion}}", "reviews", "1"]
+						},
+						"description": "Update an existing review."
+					},
+					"response": []
+				},
+				{
+					"name": "Delete Review",
+					"request": {
+						"method": "DELETE",
+						"header": [
+							{
+								"key": "Accept",
+								"value": "application/json"
+							},
+							{
+								"key": "Authorization",
+								"value": "Bearer {{authToken}}"
+							}
+						],
+						"url": {
+							"raw": "{{baseUrl}}/api/{{apiVersion}}/reviews/1",
+							"host": ["{{baseUrl}}"],
+							"path": ["api", "{{apiVersion}}", "reviews", "1"]
+						},
+						"description": "Delete a review."
+					},
+					"response": []
+				},
+				{
+					"name": "Vote on Review",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Accept",
+								"value": "application/json"
+							},
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							},
+							{
+								"key": "Authorization",
+								"value": "Bearer {{authToken}}"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"vote\": \"helpful\"\n}"
+						},
+						"url": {
+							"raw": "{{baseUrl}}/api/{{apiVersion}}/reviews/1/vote",
+							"host": ["{{baseUrl}}"],
+							"path": ["api", "{{apiVersion}}", "reviews", "1", "vote"]
+						},
+						"description": "Vote on a review as helpful or not helpful."
+					},
+					"response": []
+				}
+			],
+			"description": "Customer review management endpoints."
+		},
+		{
+			"name": "Cart",
+			"item": [
+				{
+					"name": "Get Cart",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Accept",
+								"value": "application/json"
+							},
+							{
+								"key": "X-Session-Id",
+								"value": "guest-session-123",
+								"description": "Optional session ID for guest carts"
+							}
+						],
+						"url": {
+							"raw": "{{baseUrl}}/api/{{apiVersion}}/cart",
+							"host": ["{{baseUrl}}"],
+							"path": ["api", "{{apiVersion}}", "cart"]
+						},
+						"description": "Get the current user's cart or guest cart. Use X-Session-Id header for guest carts."
+					},
+					"response": []
+				},
+				{
+					"name": "Add to Cart",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Accept",
+								"value": "application/json"
+							},
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							},
+							{
+								"key": "X-Session-Id",
+								"value": "guest-session-123",
+								"description": "Optional session ID for guest carts"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"product_id\": 1,\n    \"quantity\": 2\n}"
+						},
+						"url": {
+							"raw": "{{baseUrl}}/api/{{apiVersion}}/cart/add",
+							"host": ["{{baseUrl}}"],
+							"path": ["api", "{{apiVersion}}", "cart", "add"]
+						},
+						"description": "Add a product to the cart."
+					},
+					"response": []
+				},
+				{
+					"name": "Update Cart Item",
+					"request": {
+						"method": "PUT",
+						"header": [
+							{
+								"key": "Accept",
+								"value": "application/json"
+							},
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							},
+							{
+								"key": "X-Session-Id",
+								"value": "guest-session-123",
+								"description": "Optional session ID for guest carts"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"quantity\": 3\n}"
+						},
+						"url": {
+							"raw": "{{baseUrl}}/api/{{apiVersion}}/cart/items/1",
+							"host": ["{{baseUrl}}"],
+							"path": ["api", "{{apiVersion}}", "cart", "items", "1"]
+						},
+						"description": "Update the quantity of a cart item."
+					},
+					"response": []
+				},
+				{
+					"name": "Remove Cart Item",
+					"request": {
+						"method": "DELETE",
+						"header": [
+							{
+								"key": "Accept",
+								"value": "application/json"
+							},
+							{
+								"key": "X-Session-Id",
+								"value": "guest-session-123",
+								"description": "Optional session ID for guest carts"
+							}
+						],
+						"url": {
+							"raw": "{{baseUrl}}/api/{{apiVersion}}/cart/items/1",
+							"host": ["{{baseUrl}}"],
+							"path": ["api", "{{apiVersion}}", "cart", "items", "1"]
+						},
+						"description": "Remove an item from the cart."
+					},
+					"response": []
+				},
+				{
+					"name": "Clear Cart",
+					"request": {
+						"method": "DELETE",
+						"header": [
+							{
+								"key": "Accept",
+								"value": "application/json"
+							},
+							{
+								"key": "X-Session-Id",
+								"value": "guest-session-123",
+								"description": "Optional session ID for guest carts"
+							}
+						],
+						"url": {
+							"raw": "{{baseUrl}}/api/{{apiVersion}}/cart/clear",
+							"host": ["{{baseUrl}}"],
+							"path": ["api", "{{apiVersion}}", "cart", "clear"]
+						},
+						"description": "Clear all items from the cart."
+					},
+					"response": []
+				},
+				{
+					"name": "Apply Coupon",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Accept",
+								"value": "application/json"
+							},
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							},
+							{
+								"key": "X-Session-Id",
+								"value": "guest-session-123",
+								"description": "Optional session ID for guest carts"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"code\": \"WELCOME10\"\n}"
+						},
+						"url": {
+							"raw": "{{baseUrl}}/api/{{apiVersion}}/cart/coupon",
+							"host": ["{{baseUrl}}"],
+							"path": ["api", "{{apiVersion}}", "cart", "coupon"]
+						},
+						"description": "Apply a coupon code to the cart."
+					},
+					"response": []
+				},
+				{
+					"name": "Remove Coupon",
+					"request": {
+						"method": "DELETE",
+						"header": [
+							{
+								"key": "Accept",
+								"value": "application/json"
+							},
+							{
+								"key": "X-Session-Id",
+								"value": "guest-session-123",
+								"description": "Optional session ID for guest carts"
+							}
+						],
+						"url": {
+							"raw": "{{baseUrl}}/api/{{apiVersion}}/cart/coupon",
+							"host": ["{{baseUrl}}"],
+							"path": ["api", "{{apiVersion}}", "cart", "coupon"]
+						},
+						"description": "Remove the applied coupon from the cart."
+					},
+					"response": []
+				},
+				{
+					"name": "Merge Cart (After Login)",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Accept",
+								"value": "application/json"
+							},
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							},
+							{
+								"key": "Authorization",
+								"value": "Bearer {{authToken}}"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"session_id\": \"guest-session-123\"\n}"
+						},
+						"url": {
+							"raw": "{{baseUrl}}/api/{{apiVersion}}/cart/merge",
+							"host": ["{{baseUrl}}"],
+							"path": ["api", "{{apiVersion}}", "cart", "merge"]
+						},
+						"description": "Merge guest cart with user cart after login."
+					},
+					"response": []
+				}
+			],
+			"description": "Shopping cart endpoints. Works for both authenticated users and guests."
+		},
+		{
+			"name": "Wishlist",
+			"item": [
+				{
+					"name": "Get Wishlist",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Accept",
+								"value": "application/json"
+							},
+							{
+								"key": "Authorization",
+								"value": "Bearer {{authToken}}"
+							}
+						],
+						"url": {
+							"raw": "{{baseUrl}}/api/{{apiVersion}}/wishlist?page=1&per_page=20",
+							"host": ["{{baseUrl}}"],
+							"path": ["api", "{{apiVersion}}", "wishlist"],
+							"query": [
+								{
+									"key": "page",
+									"value": "1"
+								},
+								{
+									"key": "per_page",
+									"value": "20"
+								}
+							]
+						},
+						"description": "Get the current user's wishlist."
+					},
+					"response": []
+				},
+				{
+					"name": "Add to Wishlist",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Accept",
+								"value": "application/json"
+							},
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							},
+							{
+								"key": "Authorization",
+								"value": "Bearer {{authToken}}"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"product_id\": 1\n}"
+						},
+						"url": {
+							"raw": "{{baseUrl}}/api/{{apiVersion}}/wishlist",
+							"host": ["{{baseUrl}}"],
+							"path": ["api", "{{apiVersion}}", "wishlist"]
+						},
+						"description": "Add a product to the wishlist."
+					},
+					"response": []
+				},
+				{
+					"name": "Toggle Wishlist",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Accept",
+								"value": "application/json"
+							},
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							},
+							{
+								"key": "Authorization",
+								"value": "Bearer {{authToken}}"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"product_id\": 1\n}"
+						},
+						"url": {
+							"raw": "{{baseUrl}}/api/{{apiVersion}}/wishlist/toggle",
+							"host": ["{{baseUrl}}"],
+							"path": ["api", "{{apiVersion}}", "wishlist", "toggle"]
+						},
+						"description": "Toggle a product in wishlist (add if not present, remove if present)."
+					},
+					"response": []
+				},
+				{
+					"name": "Remove from Wishlist",
+					"request": {
+						"method": "DELETE",
+						"header": [
+							{
+								"key": "Accept",
+								"value": "application/json"
+							},
+							{
+								"key": "Authorization",
+								"value": "Bearer {{authToken}}"
+							}
+						],
+						"url": {
+							"raw": "{{baseUrl}}/api/{{apiVersion}}/wishlist/1",
+							"host": ["{{baseUrl}}"],
+							"path": ["api", "{{apiVersion}}", "wishlist", "1"]
+						},
+						"description": "Remove a product from the wishlist."
+					},
+					"response": []
+				},
+				{
+					"name": "Check Product in Wishlist",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Accept",
+								"value": "application/json"
+							},
+							{
+								"key": "Authorization",
+								"value": "Bearer {{authToken}}"
+							}
+						],
+						"url": {
+							"raw": "{{baseUrl}}/api/{{apiVersion}}/wishlist/check/1",
+							"host": ["{{baseUrl}}"],
+							"path": ["api", "{{apiVersion}}", "wishlist", "check", "1"]
+						},
+						"description": "Check if a specific product is in the user's wishlist."
+					},
+					"response": []
+				},
+				{
+					"name": "Wishlist Count",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Accept",
+								"value": "application/json"
+							},
+							{
+								"key": "Authorization",
+								"value": "Bearer {{authToken}}"
+							}
+						],
+						"url": {
+							"raw": "{{baseUrl}}/api/{{apiVersion}}/wishlist/count",
+							"host": ["{{baseUrl}}"],
+							"path": ["api", "{{apiVersion}}", "wishlist", "count"]
+						},
+						"description": "Get the count of items in the user's wishlist."
+					},
+					"response": []
+				},
+				{
+					"name": "Clear Wishlist",
+					"request": {
+						"method": "DELETE",
+						"header": [
+							{
+								"key": "Accept",
+								"value": "application/json"
+							},
+							{
+								"key": "Authorization",
+								"value": "Bearer {{authToken}}"
+							}
+						],
+						"url": {
+							"raw": "{{baseUrl}}/api/{{apiVersion}}/wishlist",
+							"host": ["{{baseUrl}}"],
+							"path": ["api", "{{apiVersion}}", "wishlist"]
+						},
+						"description": "Clear all items from the user's wishlist."
+					},
+					"response": []
+				}
+			],
+			"description": "Wishlist management endpoints. Requires authentication."
+		},
+		{
+			"name": "Orders (Customer)",
+			"item": [
+				{
+					"name": "Track Order (Public)",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Accept",
+								"value": "application/json"
+							}
+						],
+						"url": {
+							"raw": "{{baseUrl}}/api/{{apiVersion}}/orders/track/ORD-2026-00001",
+							"host": ["{{baseUrl}}"],
+							"path": ["api", "{{apiVersion}}", "orders", "track", "ORD-2026-00001"]
+						},
+						"description": "Track an order by order number. Public endpoint."
+					},
+					"response": []
+				},
+				{
+					"name": "List My Orders",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Accept",
+								"value": "application/json"
+							},
+							{
+								"key": "Authorization",
+								"value": "Bearer {{authToken}}"
+							}
+						],
+						"url": {
+							"raw": "{{baseUrl}}/api/{{apiVersion}}/orders?page=1&per_page=10&status=",
+							"host": ["{{baseUrl}}"],
+							"path": ["api", "{{apiVersion}}", "orders"],
+							"query": [
+								{
+									"key": "page",
+									"value": "1"
+								},
+								{
+									"key": "per_page",
+									"value": "10"
+								},
+								{
+									"key": "status",
+									"value": "",
+									"description": "Filter by status: pending, confirmed, processing, shipped, delivered, cancelled"
+								}
+							]
+						},
+						"description": "Get all orders for the current user."
+					},
+					"response": []
+				},
+				{
+					"name": "Checkout",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Accept",
+								"value": "application/json"
+							},
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							},
+							{
+								"key": "Authorization",
+								"value": "Bearer {{authToken}}"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"shipping_address_id\": 1,\n    \"billing_address_id\": 1,\n    \"payment_method\": \"cod\",\n    \"notes\": \"Please deliver in the evening\"\n}"
+						},
+						"url": {
+							"raw": "{{baseUrl}}/api/{{apiVersion}}/orders/checkout",
+							"host": ["{{baseUrl}}"],
+							"path": ["api", "{{apiVersion}}", "orders", "checkout"]
+						},
+						"description": "Create an order from the current cart."
+					},
+					"response": []
+				},
+				{
+					"name": "Get Order by ID",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Accept",
+								"value": "application/json"
+							},
+							{
+								"key": "Authorization",
+								"value": "Bearer {{authToken}}"
+							}
+						],
+						"url": {
+							"raw": "{{baseUrl}}/api/{{apiVersion}}/orders/1",
+							"host": ["{{baseUrl}}"],
+							"path": ["api", "{{apiVersion}}", "orders", "1"]
+						},
+						"description": "Get details of a specific order by ID."
+					},
+					"response": []
+				},
+				{
+					"name": "Get Order by Number",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Accept",
+								"value": "application/json"
+							},
+							{
+								"key": "Authorization",
+								"value": "Bearer {{authToken}}"
+							}
+						],
+						"url": {
+							"raw": "{{baseUrl}}/api/{{apiVersion}}/orders/number/ORD-2026-00001",
+							"host": ["{{baseUrl}}"],
+							"path": ["api", "{{apiVersion}}", "orders", "number", "ORD-2026-00001"]
+						},
+						"description": "Get details of a specific order by order number."
+					},
+					"response": []
+				},
+				{
+					"name": "Cancel Order",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Accept",
+								"value": "application/json"
+							},
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							},
+							{
+								"key": "Authorization",
+								"value": "Bearer {{authToken}}"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"reason\": \"Changed my mind\"\n}"
+						},
+						"url": {
+							"raw": "{{baseUrl}}/api/{{apiVersion}}/orders/1/cancel",
+							"host": ["{{baseUrl}}"],
+							"path": ["api", "{{apiVersion}}", "orders", "1", "cancel"]
+						},
+						"description": "Cancel an order (only if not yet shipped)."
+					},
+					"response": []
+				}
+			],
+			"description": "Customer order endpoints."
+		},
+		{
+			"name": "Admin - Categories",
+			"item": [
+				{
+					"name": "List Categories",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Accept",
+								"value": "application/json"
+							},
+							{
+								"key": "Authorization",
+								"value": "Bearer {{authToken}}"
+							}
+						],
+						"url": {
+							"raw": "{{baseUrl}}/api/{{apiVersion}}/admin/categories?page=1&per_page=20",
+							"host": ["{{baseUrl}}"],
+							"path": ["api", "{{apiVersion}}", "admin", "categories"],
+							"query": [
+								{
+									"key": "page",
+									"value": "1"
+								},
+								{
+									"key": "per_page",
+									"value": "20"
+								}
+							]
+						},
+						"description": "Get paginated list of categories for admin."
+					},
+					"response": []
+				},
+				{
+					"name": "Category Tree",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Accept",
+								"value": "application/json"
+							},
+							{
+								"key": "Authorization",
+								"value": "Bearer {{authToken}}"
+							}
+						],
+						"url": {
+							"raw": "{{baseUrl}}/api/{{apiVersion}}/admin/categories/tree",
+							"host": ["{{baseUrl}}"],
+							"path": ["api", "{{apiVersion}}", "admin", "categories", "tree"]
+						},
+						"description": "Get categories in hierarchical tree structure for admin."
+					},
+					"response": []
+				},
+				{
+					"name": "Create Category",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Accept",
+								"value": "application/json"
+							},
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							},
+							{
+								"key": "Authorization",
+								"value": "Bearer {{authToken}}"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"name\": \"New Category\",\n    \"slug\": \"new-category\",\n    \"parent_id\": null,\n    \"description\": \"Category description\",\n    \"icon\": \"icon-class\",\n    \"is_active\": true,\n    \"is_featured\": false,\n    \"sort_order\": 0\n}"
+						},
+						"url": {
+							"raw": "{{baseUrl}}/api/{{apiVersion}}/admin/categories",
+							"host": ["{{baseUrl}}"],
+							"path": ["api", "{{apiVersion}}", "admin", "categories"]
+						},
+						"description": "Create a new category."
+					},
+					"response": []
+				},
+				{
+					"name": "Get Category",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Accept",
+								"value": "application/json"
+							},
+							{
+								"key": "Authorization",
+								"value": "Bearer {{authToken}}"
+							}
+						],
+						"url": {
+							"raw": "{{baseUrl}}/api/{{apiVersion}}/admin/categories/1",
+							"host": ["{{baseUrl}}"],
+							"path": ["api", "{{apiVersion}}", "admin", "categories", "1"]
+						},
+						"description": "Get a category by ID."
+					},
+					"response": []
+				},
+				{
+					"name": "Update Category",
+					"request": {
+						"method": "PUT",
+						"header": [
+							{
+								"key": "Accept",
+								"value": "application/json"
+							},
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							},
+							{
+								"key": "Authorization",
+								"value": "Bearer {{authToken}}"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"name\": \"Updated Category Name\",\n    \"description\": \"Updated description\",\n    \"is_featured\": true\n}"
+						},
+						"url": {
+							"raw": "{{baseUrl}}/api/{{apiVersion}}/admin/categories/1",
+							"host": ["{{baseUrl}}"],
+							"path": ["api", "{{apiVersion}}", "admin", "categories", "1"]
+						},
+						"description": "Update a category."
+					},
+					"response": []
+				},
+				{
+					"name": "Delete Category",
+					"request": {
+						"method": "DELETE",
+						"header": [
+							{
+								"key": "Accept",
+								"value": "application/json"
+							},
+							{
+								"key": "Authorization",
+								"value": "Bearer {{authToken}}"
+							}
+						],
+						"url": {
+							"raw": "{{baseUrl}}/api/{{apiVersion}}/admin/categories/1",
+							"host": ["{{baseUrl}}"],
+							"path": ["api", "{{apiVersion}}", "admin", "categories", "1"]
+						},
+						"description": "Delete a category."
+					},
+					"response": []
+				}
+			],
+			"description": "Admin category management endpoints."
+		},
+		{
+			"name": "Admin - Brands",
+			"item": [
+				{
+					"name": "List Brands",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Accept",
+								"value": "application/json"
+							},
+							{
+								"key": "Authorization",
+								"value": "Bearer {{authToken}}"
+							}
+						],
+						"url": {
+							"raw": "{{baseUrl}}/api/{{apiVersion}}/admin/brands?page=1&per_page=20",
+							"host": ["{{baseUrl}}"],
+							"path": ["api", "{{apiVersion}}", "admin", "brands"],
+							"query": [
+								{
+									"key": "page",
+									"value": "1"
+								},
+								{
+									"key": "per_page",
+									"value": "20"
+								}
+							]
+						},
+						"description": "Get paginated list of brands for admin."
+					},
+					"response": []
+				},
+				{
+					"name": "All Brands (No Pagination)",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Accept",
+								"value": "application/json"
+							},
+							{
+								"key": "Authorization",
+								"value": "Bearer {{authToken}}"
+							}
+						],
+						"url": {
+							"raw": "{{baseUrl}}/api/{{apiVersion}}/admin/brands/all",
+							"host": ["{{baseUrl}}"],
+							"path": ["api", "{{apiVersion}}", "admin", "brands", "all"]
+						},
+						"description": "Get all brands without pagination (for dropdowns)."
+					},
+					"response": []
+				},
+				{
+					"name": "Create Brand",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Accept",
+								"value": "application/json"
+							},
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							},
+							{
+								"key": "Authorization",
+								"value": "Bearer {{authToken}}"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"name\": \"New Brand\",\n    \"slug\": \"new-brand\",\n    \"description\": \"Brand description\",\n    \"website\": \"https://brand.com\",\n    \"is_active\": true,\n    \"is_featured\": false\n}"
+						},
+						"url": {
+							"raw": "{{baseUrl}}/api/{{apiVersion}}/admin/brands",
+							"host": ["{{baseUrl}}"],
+							"path": ["api", "{{apiVersion}}", "admin", "brands"]
+						},
+						"description": "Create a new brand."
+					},
+					"response": []
+				},
+				{
+					"name": "Get Brand",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Accept",
+								"value": "application/json"
+							},
+							{
+								"key": "Authorization",
+								"value": "Bearer {{authToken}}"
+							}
+						],
+						"url": {
+							"raw": "{{baseUrl}}/api/{{apiVersion}}/admin/brands/1",
+							"host": ["{{baseUrl}}"],
+							"path": ["api", "{{apiVersion}}", "admin", "brands", "1"]
+						},
+						"description": "Get a brand by ID."
+					},
+					"response": []
+				},
+				{
+					"name": "Update Brand",
+					"request": {
+						"method": "PUT",
+						"header": [
+							{
+								"key": "Accept",
+								"value": "application/json"
+							},
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							},
+							{
+								"key": "Authorization",
+								"value": "Bearer {{authToken}}"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"name\": \"Updated Brand Name\",\n    \"is_featured\": true\n}"
+						},
+						"url": {
+							"raw": "{{baseUrl}}/api/{{apiVersion}}/admin/brands/1",
+							"host": ["{{baseUrl}}"],
+							"path": ["api", "{{apiVersion}}", "admin", "brands", "1"]
+						},
+						"description": "Update a brand."
+					},
+					"response": []
+				},
+				{
+					"name": "Delete Brand",
+					"request": {
+						"method": "DELETE",
+						"header": [
+							{
+								"key": "Accept",
+								"value": "application/json"
+							},
+							{
+								"key": "Authorization",
+								"value": "Bearer {{authToken}}"
+							}
+						],
+						"url": {
+							"raw": "{{baseUrl}}/api/{{apiVersion}}/admin/brands/1",
+							"host": ["{{baseUrl}}"],
+							"path": ["api", "{{apiVersion}}", "admin", "brands", "1"]
+						},
+						"description": "Delete a brand."
+					},
+					"response": []
+				}
+			],
+			"description": "Admin brand management endpoints."
+		},
+		{
+			"name": "Admin - Products",
+			"item": [
+				{
+					"name": "List Products",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Accept",
+								"value": "application/json"
+							},
+							{
+								"key": "Authorization",
+								"value": "Bearer {{authToken}}"
+							}
+						],
+						"url": {
+							"raw": "{{baseUrl}}/api/{{apiVersion}}/admin/products?page=1&per_page=20&category=&brand=&status=",
+							"host": ["{{baseUrl}}"],
+							"path": ["api", "{{apiVersion}}", "admin", "products"],
+							"query": [
+								{
+									"key": "page",
+									"value": "1"
+								},
+								{
+									"key": "per_page",
+									"value": "20"
+								},
+								{
+									"key": "category",
+									"value": ""
+								},
+								{
+									"key": "brand",
+									"value": ""
+								},
+								{
+									"key": "status",
+									"value": ""
+								}
+							]
+						},
+						"description": "Get paginated list of products for admin."
+					},
+					"response": []
+				},
+				{
+					"name": "Low Stock Products",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Accept",
+								"value": "application/json"
+							},
+							{
+								"key": "Authorization",
+								"value": "Bearer {{authToken}}"
+							}
+						],
+						"url": {
+							"raw": "{{baseUrl}}/api/{{apiVersion}}/admin/products/low-stock?threshold=10",
+							"host": ["{{baseUrl}}"],
+							"path": ["api", "{{apiVersion}}", "admin", "products", "low-stock"],
+							"query": [
+								{
+									"key": "threshold",
+									"value": "10",
+									"description": "Stock threshold"
+								}
+							]
+						},
+						"description": "Get products with low stock."
+					},
+					"response": []
+				},
+				{
+					"name": "Out of Stock Products",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Accept",
+								"value": "application/json"
+							},
+							{
+								"key": "Authorization",
+								"value": "Bearer {{authToken}}"
+							}
+						],
+						"url": {
+							"raw": "{{baseUrl}}/api/{{apiVersion}}/admin/products/out-of-stock",
+							"host": ["{{baseUrl}}"],
+							"path": ["api", "{{apiVersion}}", "admin", "products", "out-of-stock"]
+						},
+						"description": "Get products that are out of stock."
+					},
+					"response": []
+				},
+				{
+					"name": "Create Product",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Accept",
+								"value": "application/json"
+							},
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							},
+							{
+								"key": "Authorization",
+								"value": "Bearer {{authToken}}"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"name\": \"New Product\",\n    \"slug\": \"new-product\",\n    \"sku\": \"PROD-001\",\n    \"category_id\": 1,\n    \"brand_id\": 1,\n    \"short_description\": \"Short description\",\n    \"description\": \"Full product description\",\n    \"price\": 9999.00,\n    \"compare_price\": 12999.00,\n    \"cost_price\": 7999.00,\n    \"quantity\": 100,\n    \"low_stock_threshold\": 10,\n    \"weight\": 500,\n    \"is_active\": true,\n    \"is_featured\": false\n}"
+						},
+						"url": {
+							"raw": "{{baseUrl}}/api/{{apiVersion}}/admin/products",
+							"host": ["{{baseUrl}}"],
+							"path": ["api", "{{apiVersion}}", "admin", "products"]
+						},
+						"description": "Create a new product."
+					},
+					"response": []
+				},
+				{
+					"name": "Get Product",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Accept",
+								"value": "application/json"
+							},
+							{
+								"key": "Authorization",
+								"value": "Bearer {{authToken}}"
+							}
+						],
+						"url": {
+							"raw": "{{baseUrl}}/api/{{apiVersion}}/admin/products/1",
+							"host": ["{{baseUrl}}"],
+							"path": ["api", "{{apiVersion}}", "admin", "products", "1"]
+						},
+						"description": "Get a product by ID."
+					},
+					"response": []
+				},
+				{
+					"name": "Update Product",
+					"request": {
+						"method": "PUT",
+						"header": [
+							{
+								"key": "Accept",
+								"value": "application/json"
+							},
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							},
+							{
+								"key": "Authorization",
+								"value": "Bearer {{authToken}}"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"name\": \"Updated Product Name\",\n    \"price\": 10999.00,\n    \"quantity\": 150,\n    \"is_featured\": true\n}"
+						},
+						"url": {
+							"raw": "{{baseUrl}}/api/{{apiVersion}}/admin/products/1",
+							"host": ["{{baseUrl}}"],
+							"path": ["api", "{{apiVersion}}", "admin", "products", "1"]
+						},
+						"description": "Update a product."
+					},
+					"response": []
+				},
+				{
+					"name": "Delete Product",
+					"request": {
+						"method": "DELETE",
+						"header": [
+							{
+								"key": "Accept",
+								"value": "application/json"
+							},
+							{
+								"key": "Authorization",
+								"value": "Bearer {{authToken}}"
+							}
+						],
+						"url": {
+							"raw": "{{baseUrl}}/api/{{apiVersion}}/admin/products/1",
+							"host": ["{{baseUrl}}"],
+							"path": ["api", "{{apiVersion}}", "admin", "products", "1"]
+						},
+						"description": "Delete a product."
+					},
+					"response": []
+				}
+			],
+			"description": "Admin product management endpoints."
+		},
+		{
+			"name": "Admin - Coupons",
+			"item": [
+				{
+					"name": "List Coupons",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Accept",
+								"value": "application/json"
+							},
+							{
+								"key": "Authorization",
+								"value": "Bearer {{authToken}}"
+							}
+						],
+						"url": {
+							"raw": "{{baseUrl}}/api/{{apiVersion}}/admin/coupons?page=1&per_page=20",
+							"host": ["{{baseUrl}}"],
+							"path": ["api", "{{apiVersion}}", "admin", "coupons"],
+							"query": [
+								{
+									"key": "page",
+									"value": "1"
+								},
+								{
+									"key": "per_page",
+									"value": "20"
+								}
+							]
+						},
+						"description": "Get paginated list of coupons."
+					},
+					"response": []
+				},
+				{
+					"name": "Create Coupon",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Accept",
+								"value": "application/json"
+							},
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							},
+							{
+								"key": "Authorization",
+								"value": "Bearer {{authToken}}"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"code\": \"NEWDISCOUNT\",\n    \"type\": \"percentage\",\n    \"value\": 15,\n    \"min_order_amount\": 5000,\n    \"max_discount_amount\": 2000,\n    \"usage_limit\": 100,\n    \"usage_limit_per_user\": 1,\n    \"starts_at\": \"2026-01-01 00:00:00\",\n    \"expires_at\": \"2026-12-31 23:59:59\",\n    \"is_active\": true,\n    \"description\": \"New year discount\"\n}"
+						},
+						"url": {
+							"raw": "{{baseUrl}}/api/{{apiVersion}}/admin/coupons",
+							"host": ["{{baseUrl}}"],
+							"path": ["api", "{{apiVersion}}", "admin", "coupons"]
+						},
+						"description": "Create a new coupon."
+					},
+					"response": []
+				},
+				{
+					"name": "Get Coupon",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Accept",
+								"value": "application/json"
+							},
+							{
+								"key": "Authorization",
+								"value": "Bearer {{authToken}}"
+							}
+						],
+						"url": {
+							"raw": "{{baseUrl}}/api/{{apiVersion}}/admin/coupons/1",
+							"host": ["{{baseUrl}}"],
+							"path": ["api", "{{apiVersion}}", "admin", "coupons", "1"]
+						},
+						"description": "Get a coupon by ID."
+					},
+					"response": []
+				},
+				{
+					"name": "Update Coupon",
+					"request": {
+						"method": "PUT",
+						"header": [
+							{
+								"key": "Accept",
+								"value": "application/json"
+							},
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							},
+							{
+								"key": "Authorization",
+								"value": "Bearer {{authToken}}"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"value\": 20,\n    \"is_active\": true\n}"
+						},
+						"url": {
+							"raw": "{{baseUrl}}/api/{{apiVersion}}/admin/coupons/1",
+							"host": ["{{baseUrl}}"],
+							"path": ["api", "{{apiVersion}}", "admin", "coupons", "1"]
+						},
+						"description": "Update a coupon."
+					},
+					"response": []
+				},
+				{
+					"name": "Delete Coupon",
+					"request": {
+						"method": "DELETE",
+						"header": [
+							{
+								"key": "Accept",
+								"value": "application/json"
+							},
+							{
+								"key": "Authorization",
+								"value": "Bearer {{authToken}}"
+							}
+						],
+						"url": {
+							"raw": "{{baseUrl}}/api/{{apiVersion}}/admin/coupons/1",
+							"host": ["{{baseUrl}}"],
+							"path": ["api", "{{apiVersion}}", "admin", "coupons", "1"]
+						},
+						"description": "Delete a coupon."
+					},
+					"response": []
+				}
+			],
+			"description": "Admin coupon management endpoints."
+		},
+		{
+			"name": "Admin - Orders",
+			"item": [
+				{
+					"name": "List Orders",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Accept",
+								"value": "application/json"
+							},
+							{
+								"key": "Authorization",
+								"value": "Bearer {{authToken}}"
+							}
+						],
+						"url": {
+							"raw": "{{baseUrl}}/api/{{apiVersion}}/admin/orders?page=1&per_page=20&status=&payment_status=&from_date=&to_date=",
+							"host": ["{{baseUrl}}"],
+							"path": ["api", "{{apiVersion}}", "admin", "orders"],
+							"query": [
+								{
+									"key": "page",
+									"value": "1"
+								},
+								{
+									"key": "per_page",
+									"value": "20"
+								},
+								{
+									"key": "status",
+									"value": "",
+									"description": "pending, confirmed, processing, shipped, delivered, cancelled"
+								},
+								{
+									"key": "payment_status",
+									"value": "",
+									"description": "pending, paid, failed, refunded"
+								},
+								{
+									"key": "from_date",
+									"value": "",
+									"description": "YYYY-MM-DD"
+								},
+								{
+									"key": "to_date",
+									"value": "",
+									"description": "YYYY-MM-DD"
+								}
+							]
+						},
+						"description": "Get paginated list of all orders."
+					},
+					"response": []
+				},
+				{
+					"name": "Order Statistics",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Accept",
+								"value": "application/json"
+							},
+							{
+								"key": "Authorization",
+								"value": "Bearer {{authToken}}"
+							}
+						],
+						"url": {
+							"raw": "{{baseUrl}}/api/{{apiVersion}}/admin/orders/statistics?from_date=&to_date=",
+							"host": ["{{baseUrl}}"],
+							"path": ["api", "{{apiVersion}}", "admin", "orders", "statistics"],
+							"query": [
+								{
+									"key": "from_date",
+									"value": "",
+									"description": "YYYY-MM-DD"
+								},
+								{
+									"key": "to_date",
+									"value": "",
+									"description": "YYYY-MM-DD"
+								}
+							]
+						},
+						"description": "Get order statistics (total orders, revenue, etc.)."
+					},
+					"response": []
+				},
+				{
+					"name": "Get Order",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Accept",
+								"value": "application/json"
+							},
+							{
+								"key": "Authorization",
+								"value": "Bearer {{authToken}}"
+							}
+						],
+						"url": {
+							"raw": "{{baseUrl}}/api/{{apiVersion}}/admin/orders/1",
+							"host": ["{{baseUrl}}"],
+							"path": ["api", "{{apiVersion}}", "admin", "orders", "1"]
+						},
+						"description": "Get order details by ID."
+					},
+					"response": []
+				},
+				{
+					"name": "Update Order Status",
+					"request": {
+						"method": "PATCH",
+						"header": [
+							{
+								"key": "Accept",
+								"value": "application/json"
+							},
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							},
+							{
+								"key": "Authorization",
+								"value": "Bearer {{authToken}}"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"status\": \"processing\",\n    \"note\": \"Order is being processed\"\n}"
+						},
+						"url": {
+							"raw": "{{baseUrl}}/api/{{apiVersion}}/admin/orders/1/status",
+							"host": ["{{baseUrl}}"],
+							"path": ["api", "{{apiVersion}}", "admin", "orders", "1", "status"]
+						},
+						"description": "Update order status."
+					},
+					"response": []
+				},
+				{
+					"name": "Update Payment Status",
+					"request": {
+						"method": "PATCH",
+						"header": [
+							{
+								"key": "Accept",
+								"value": "application/json"
+							},
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							},
+							{
+								"key": "Authorization",
+								"value": "Bearer {{authToken}}"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"payment_status\": \"paid\",\n    \"transaction_id\": \"TXN123456\"\n}"
+						},
+						"url": {
+							"raw": "{{baseUrl}}/api/{{apiVersion}}/admin/orders/1/payment-status",
+							"host": ["{{baseUrl}}"],
+							"path": ["api", "{{apiVersion}}", "admin", "orders", "1", "payment-status"]
+						},
+						"description": "Update order payment status."
+					},
+					"response": []
+				},
+				{
+					"name": "Update Tracking Info",
+					"request": {
+						"method": "PATCH",
+						"header": [
+							{
+								"key": "Accept",
+								"value": "application/json"
+							},
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							},
+							{
+								"key": "Authorization",
+								"value": "Bearer {{authToken}}"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"tracking_number\": \"TRACK123456789\",\n    \"shipping_carrier\": \"Sundarban Courier\"\n}"
+						},
+						"url": {
+							"raw": "{{baseUrl}}/api/{{apiVersion}}/admin/orders/1/tracking",
+							"host": ["{{baseUrl}}"],
+							"path": ["api", "{{apiVersion}}", "admin", "orders", "1", "tracking"]
+						},
+						"description": "Update shipping tracking information."
+					},
+					"response": []
+				},
+				{
+					"name": "Cancel Order (Admin)",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Accept",
+								"value": "application/json"
+							},
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							},
+							{
+								"key": "Authorization",
+								"value": "Bearer {{authToken}}"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"reason\": \"Customer requested cancellation\"\n}"
+						},
+						"url": {
+							"raw": "{{baseUrl}}/api/{{apiVersion}}/admin/orders/1/cancel",
+							"host": ["{{baseUrl}}"],
+							"path": ["api", "{{apiVersion}}", "admin", "orders", "1", "cancel"]
+						},
+						"description": "Cancel an order (admin action)."
+					},
+					"response": []
+				}
+			],
+			"description": "Admin order management endpoints."
+		},
+		{
+			"name": "Admin - Reviews",
+			"item": [
+				{
+					"name": "List Reviews",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Accept",
+								"value": "application/json"
+							},
+							{
+								"key": "Authorization",
+								"value": "Bearer {{authToken}}"
+							}
+						],
+						"url": {
+							"raw": "{{baseUrl}}/api/{{apiVersion}}/admin/reviews?page=1&per_page=20&status=&rating=",
+							"host": ["{{baseUrl}}"],
+							"path": ["api", "{{apiVersion}}", "admin", "reviews"],
+							"query": [
+								{
+									"key": "page",
+									"value": "1"
+								},
+								{
+									"key": "per_page",
+									"value": "20"
+								},
+								{
+									"key": "status",
+									"value": "",
+									"description": "pending, approved, rejected"
+								},
+								{
+									"key": "rating",
+									"value": "",
+									"description": "1-5"
+								}
+							]
+						},
+						"description": "Get paginated list of all reviews."
+					},
+					"response": []
+				},
+				{
+					"name": "Get Review",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Accept",
+								"value": "application/json"
+							},
+							{
+								"key": "Authorization",
+								"value": "Bearer {{authToken}}"
+							}
+						],
+						"url": {
+							"raw": "{{baseUrl}}/api/{{apiVersion}}/admin/reviews/1",
+							"host": ["{{baseUrl}}"],
+							"path": ["api", "{{apiVersion}}", "admin", "reviews", "1"]
+						},
+						"description": "Get review details by ID."
+					},
+					"response": []
+				},
+				{
+					"name": "Approve Review",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Accept",
+								"value": "application/json"
+							},
+							{
+								"key": "Authorization",
+								"value": "Bearer {{authToken}}"
+							}
+						],
+						"url": {
+							"raw": "{{baseUrl}}/api/{{apiVersion}}/admin/reviews/1/approve",
+							"host": ["{{baseUrl}}"],
+							"path": ["api", "{{apiVersion}}", "admin", "reviews", "1", "approve"]
+						},
+						"description": "Approve a pending review."
+					},
+					"response": []
+				},
+				{
+					"name": "Reject Review",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Accept",
+								"value": "application/json"
+							},
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							},
+							{
+								"key": "Authorization",
+								"value": "Bearer {{authToken}}"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"reason\": \"Inappropriate content\"\n}"
+						},
+						"url": {
+							"raw": "{{baseUrl}}/api/{{apiVersion}}/admin/reviews/1/reject",
+							"host": ["{{baseUrl}}"],
+							"path": ["api", "{{apiVersion}}", "admin", "reviews", "1", "reject"]
+						},
+						"description": "Reject a review."
+					},
+					"response": []
+				},
+				{
+					"name": "Respond to Review",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Accept",
+								"value": "application/json"
+							},
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							},
+							{
+								"key": "Authorization",
+								"value": "Bearer {{authToken}}"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"response\": \"Thank you for your feedback! We appreciate your review.\"\n}"
+						},
+						"url": {
+							"raw": "{{baseUrl}}/api/{{apiVersion}}/admin/reviews/1/respond",
+							"host": ["{{baseUrl}}"],
+							"path": ["api", "{{apiVersion}}", "admin", "reviews", "1", "respond"]
+						},
+						"description": "Add an admin response to a review."
+					},
+					"response": []
+				},
+				{
+					"name": "Delete Review",
+					"request": {
+						"method": "DELETE",
+						"header": [
+							{
+								"key": "Accept",
+								"value": "application/json"
+							},
+							{
+								"key": "Authorization",
+								"value": "Bearer {{authToken}}"
+							}
+						],
+						"url": {
+							"raw": "{{baseUrl}}/api/{{apiVersion}}/admin/reviews/1",
+							"host": ["{{baseUrl}}"],
+							"path": ["api", "{{apiVersion}}", "admin", "reviews", "1"]
+						},
+						"description": "Delete a review."
+					},
+					"response": []
+				}
+			],
+			"description": "Admin review management endpoints."
+		}
+	],
+	"event": [
+		{
+			"listen": "prerequest",
+			"script": {
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		},
+		{
+			"listen": "test",
+			"script": {
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		}
+	]
+}

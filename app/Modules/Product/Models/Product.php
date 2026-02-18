@@ -154,7 +154,7 @@ class Product extends Model
      */
     public function approvedReviews()
     {
-        return $this->reviews()->where('is_approved', true);
+        return $this->reviews()->where('status', 'approved');
     }
 
     /*

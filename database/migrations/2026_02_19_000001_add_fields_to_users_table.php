@@ -14,6 +14,8 @@ return new class extends Migration
         Schema::table('users', function (Blueprint $table) {
             $table->string('phone', 20)->nullable()->after('email');
             $table->string('avatar')->nullable()->after('phone');
+            $table->enum('role', ['admin', 'staff', 'customer'])->default('customer')->after('avatar');
+            $table->enum('status', ['active', 'inactive', 'banned'])->default('active')->after('role');
         });
     }
 
@@ -23,7 +25,7 @@ return new class extends Migration
     public function down(): void
     {
         Schema::table('users', function (Blueprint $table) {
-            $table->dropColumn(['phone', 'avatar']);
+            $table->dropColumn(['phone', 'avatar', 'role', 'status']);
         });
     }
 };

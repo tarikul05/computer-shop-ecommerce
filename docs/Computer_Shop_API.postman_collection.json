@@ -2965,6 +2965,675 @@
 				}
 			],
 			"description": "Admin review management endpoints."
+		},
+		{
+			"name": "Search",
+			"item": [
+				{
+					"name": "Search Products",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Accept",
+								"value": "application/json"
+							}
+						],
+						"url": {
+							"raw": "{{baseUrl}}/api/{{apiVersion}}/search?q=laptop&category=laptops&min_price=50000&max_price=150000&sort_by=price&sort_order=asc&per_page=20",
+							"host": ["{{baseUrl}}"],
+							"path": ["api", "{{apiVersion}}", "search"],
+							"query": [
+								{
+									"key": "q",
+									"value": "laptop",
+									"description": "Search query"
+								},
+								{
+									"key": "category",
+									"value": "laptops",
+									"description": "Filter by category slug"
+								},
+								{
+									"key": "min_price",
+									"value": "50000",
+									"description": "Minimum price filter"
+								},
+								{
+									"key": "max_price",
+									"value": "150000",
+									"description": "Maximum price filter"
+								},
+								{
+									"key": "sort_by",
+									"value": "price",
+									"description": "Sort by: relevance, price, name, created_at, rating, popularity"
+								},
+								{
+									"key": "sort_order",
+									"value": "asc",
+									"description": "Sort order: asc or desc"
+								},
+								{
+									"key": "per_page",
+									"value": "20",
+									"description": "Items per page (max 100)"
+								}
+							]
+						},
+						"description": "Search products with full-text search and filters."
+					},
+					"response": []
+				},
+				{
+					"name": "Search All (Products, Categories, Brands)",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Accept",
+								"value": "application/json"
+							}
+						],
+						"url": {
+							"raw": "{{baseUrl}}/api/{{apiVersion}}/search/all?q=gaming&limit=10",
+							"host": ["{{baseUrl}}"],
+							"path": ["api", "{{apiVersion}}", "search", "all"],
+							"query": [
+								{
+									"key": "q",
+									"value": "gaming",
+									"description": "Search query"
+								},
+								{
+									"key": "limit",
+									"value": "10",
+									"description": "Results limit per entity"
+								}
+							]
+						},
+						"description": "Search across products, categories, and brands."
+					},
+					"response": []
+				},
+				{
+					"name": "Autocomplete",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Accept",
+								"value": "application/json"
+							}
+						],
+						"url": {
+							"raw": "{{baseUrl}}/api/{{apiVersion}}/search/autocomplete?q=gam&limit=8",
+							"host": ["{{baseUrl}}"],
+							"path": ["api", "{{apiVersion}}", "search", "autocomplete"],
+							"query": [
+								{
+									"key": "q",
+									"value": "gam",
+									"description": "Partial search query (min 2 chars)"
+								},
+								{
+									"key": "limit",
+									"value": "8",
+									"description": "Results limit"
+								}
+							]
+						},
+						"description": "Get autocomplete suggestions with products, categories, and brands."
+					},
+					"response": []
+				},
+				{
+					"name": "Search Suggestions",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Accept",
+								"value": "application/json"
+							}
+						],
+						"url": {
+							"raw": "{{baseUrl}}/api/{{apiVersion}}/search/suggestions?q=lap&limit=10",
+							"host": ["{{baseUrl}}"],
+							"path": ["api", "{{apiVersion}}", "search", "suggestions"],
+							"query": [
+								{
+									"key": "q",
+									"value": "lap",
+									"description": "Partial search query"
+								},
+								{
+									"key": "limit",
+									"value": "10",
+									"description": "Number of suggestions"
+								}
+							]
+						},
+						"description": "Get search term suggestions based on popular searches and product names."
+					},
+					"response": []
+				},
+				{
+					"name": "Popular Searches",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Accept",
+								"value": "application/json"
+							}
+						],
+						"url": {
+							"raw": "{{baseUrl}}/api/{{apiVersion}}/search/popular?limit=10",
+							"host": ["{{baseUrl}}"],
+							"path": ["api", "{{apiVersion}}", "search", "popular"],
+							"query": [
+								{
+									"key": "limit",
+									"value": "10",
+									"description": "Number of popular searches to return"
+								}
+							]
+						},
+						"description": "Get most popular search terms."
+					},
+					"response": []
+				},
+				{
+					"name": "Trending Searches",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Accept",
+								"value": "application/json"
+							}
+						],
+						"url": {
+							"raw": "{{baseUrl}}/api/{{apiVersion}}/search/trending?days=7&limit=10",
+							"host": ["{{baseUrl}}"],
+							"path": ["api", "{{apiVersion}}", "search", "trending"],
+							"query": [
+								{
+									"key": "days",
+									"value": "7",
+									"description": "Number of days to consider for trending"
+								},
+								{
+									"key": "limit",
+									"value": "10",
+									"description": "Number of trending searches to return"
+								}
+							]
+						},
+						"description": "Get trending search terms from recent days."
+					},
+					"response": []
+				},
+				{
+					"name": "Search Filters",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Accept",
+								"value": "application/json"
+							}
+						],
+						"url": {
+							"raw": "{{baseUrl}}/api/{{apiVersion}}/search/filters?q=laptop",
+							"host": ["{{baseUrl}}"],
+							"path": ["api", "{{apiVersion}}", "search", "filters"],
+							"query": [
+								{
+									"key": "q",
+									"value": "laptop",
+									"description": "Search query for contextual filters"
+								}
+							]
+						},
+						"description": "Get available filter options (price ranges, ratings, sort options)."
+					},
+					"response": []
+				},
+				{
+					"name": "Track Search Click",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Accept",
+								"value": "application/json"
+							},
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"query\": \"gaming laptop\",\n    \"type\": \"click\"\n}"
+						},
+						"url": {
+							"raw": "{{baseUrl}}/api/{{apiVersion}}/search/track",
+							"host": ["{{baseUrl}}"],
+							"path": ["api", "{{apiVersion}}", "search", "track"]
+						},
+						"description": "Track when a user clicks on a search result."
+					},
+					"response": []
+				},
+				{
+					"name": "Track Search Conversion",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Accept",
+								"value": "application/json"
+							},
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"query\": \"gaming laptop\",\n    \"type\": \"conversion\"\n}"
+						},
+						"url": {
+							"raw": "{{baseUrl}}/api/{{apiVersion}}/search/track",
+							"host": ["{{baseUrl}}"],
+							"path": ["api", "{{apiVersion}}", "search", "track"]
+						},
+						"description": "Track when a search leads to a conversion (add to cart/purchase)."
+					},
+					"response": []
+				},
+				{
+					"name": "Get Search History",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Accept",
+								"value": "application/json"
+							},
+							{
+								"key": "Authorization",
+								"value": "Bearer {{authToken}}"
+							}
+						],
+						"url": {
+							"raw": "{{baseUrl}}/api/{{apiVersion}}/search/history?limit=10",
+							"host": ["{{baseUrl}}"],
+							"path": ["api", "{{apiVersion}}", "search", "history"],
+							"query": [
+								{
+									"key": "limit",
+									"value": "10",
+									"description": "Number of history items"
+								}
+							]
+						},
+						"description": "Get authenticated user's search history."
+					},
+					"response": []
+				},
+				{
+					"name": "Clear Search History",
+					"request": {
+						"method": "DELETE",
+						"header": [
+							{
+								"key": "Accept",
+								"value": "application/json"
+							},
+							{
+								"key": "Authorization",
+								"value": "Bearer {{authToken}}"
+							}
+						],
+						"url": {
+							"raw": "{{baseUrl}}/api/{{apiVersion}}/search/history",
+							"host": ["{{baseUrl}}"],
+							"path": ["api", "{{apiVersion}}", "search", "history"]
+						},
+						"description": "Clear authenticated user's search history."
+					},
+					"response": []
+				}
+			],
+			"description": "Search functionality including full-text search, autocomplete, suggestions, and analytics."
+		},
+		{
+			"name": "Admin Search Management",
+			"item": [
+				{
+					"name": "Search Analytics",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Accept",
+								"value": "application/json"
+							},
+							{
+								"key": "Authorization",
+								"value": "Bearer {{authToken}}"
+							}
+						],
+						"url": {
+							"raw": "{{baseUrl}}/api/{{apiVersion}}/admin/search/analytics",
+							"host": ["{{baseUrl}}"],
+							"path": ["api", "{{apiVersion}}", "admin", "search", "analytics"]
+						},
+						"description": "Get search analytics dashboard data."
+					},
+					"response": []
+				},
+				{
+					"name": "Search Performance",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Accept",
+								"value": "application/json"
+							},
+							{
+								"key": "Authorization",
+								"value": "Bearer {{authToken}}"
+							}
+						],
+						"url": {
+							"raw": "{{baseUrl}}/api/{{apiVersion}}/admin/search/performance",
+							"host": ["{{baseUrl}}"],
+							"path": ["api", "{{apiVersion}}", "admin", "search", "performance"]
+						},
+						"description": "Get search performance metrics (CTR, conversion rates)."
+					},
+					"response": []
+				},
+				{
+					"name": "List Popular Queries",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Accept",
+								"value": "application/json"
+							},
+							{
+								"key": "Authorization",
+								"value": "Bearer {{authToken}}"
+							}
+						],
+						"url": {
+							"raw": "{{baseUrl}}/api/{{apiVersion}}/admin/search/queries/popular?per_page=20&sort_by=search_count&sort_order=desc",
+							"host": ["{{baseUrl}}"],
+							"path": ["api", "{{apiVersion}}", "admin", "search", "queries", "popular"],
+							"query": [
+								{
+									"key": "per_page",
+									"value": "20"
+								},
+								{
+									"key": "sort_by",
+									"value": "search_count"
+								},
+								{
+									"key": "sort_order",
+									"value": "desc"
+								}
+							]
+						},
+						"description": "List all popular search queries with pagination."
+					},
+					"response": []
+				},
+				{
+					"name": "List Zero-Result Queries",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Accept",
+								"value": "application/json"
+							},
+							{
+								"key": "Authorization",
+								"value": "Bearer {{authToken}}"
+							}
+						],
+						"url": {
+							"raw": "{{baseUrl}}/api/{{apiVersion}}/admin/search/queries/zero-results?days=30&per_page=20",
+							"host": ["{{baseUrl}}"],
+							"path": ["api", "{{apiVersion}}", "admin", "search", "queries", "zero-results"],
+							"query": [
+								{
+									"key": "days",
+									"value": "30",
+									"description": "Look back period in days"
+								},
+								{
+									"key": "per_page",
+									"value": "20"
+								}
+							]
+						},
+						"description": "List search queries that returned zero results."
+					},
+					"response": []
+				},
+				{
+					"name": "List Synonyms",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Accept",
+								"value": "application/json"
+							},
+							{
+								"key": "Authorization",
+								"value": "Bearer {{authToken}}"
+							}
+						],
+						"url": {
+							"raw": "{{baseUrl}}/api/{{apiVersion}}/admin/search/synonyms",
+							"host": ["{{baseUrl}}"],
+							"path": ["api", "{{apiVersion}}", "admin", "search", "synonyms"]
+						},
+						"description": "List all search synonyms."
+					},
+					"response": []
+				},
+				{
+					"name": "Create Synonym",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Accept",
+								"value": "application/json"
+							},
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							},
+							{
+								"key": "Authorization",
+								"value": "Bearer {{authToken}}"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"term\": \"phone\",\n    \"synonyms\": [\"mobile\", \"smartphone\", \"cell phone\", \"handset\"],\n    \"is_active\": true\n}"
+						},
+						"url": {
+							"raw": "{{baseUrl}}/api/{{apiVersion}}/admin/search/synonyms",
+							"host": ["{{baseUrl}}"],
+							"path": ["api", "{{apiVersion}}", "admin", "search", "synonyms"]
+						},
+						"description": "Create a new search synonym."
+					},
+					"response": []
+				},
+				{
+					"name": "Update Synonym",
+					"request": {
+						"method": "PUT",
+						"header": [
+							{
+								"key": "Accept",
+								"value": "application/json"
+							},
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							},
+							{
+								"key": "Authorization",
+								"value": "Bearer {{authToken}}"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"synonyms\": [\"mobile\", \"smartphone\", \"cell phone\", \"handset\", \"android\", \"iphone\"],\n    \"is_active\": true\n}"
+						},
+						"url": {
+							"raw": "{{baseUrl}}/api/{{apiVersion}}/admin/search/synonyms/1",
+							"host": ["{{baseUrl}}"],
+							"path": ["api", "{{apiVersion}}", "admin", "search", "synonyms", "1"]
+						},
+						"description": "Update an existing search synonym."
+					},
+					"response": []
+				},
+				{
+					"name": "Delete Synonym",
+					"request": {
+						"method": "DELETE",
+						"header": [
+							{
+								"key": "Accept",
+								"value": "application/json"
+							},
+							{
+								"key": "Authorization",
+								"value": "Bearer {{authToken}}"
+							}
+						],
+						"url": {
+							"raw": "{{baseUrl}}/api/{{apiVersion}}/admin/search/synonyms/1",
+							"host": ["{{baseUrl}}"],
+							"path": ["api", "{{apiVersion}}", "admin", "search", "synonyms", "1"]
+						},
+						"description": "Delete a search synonym."
+					},
+					"response": []
+				},
+				{
+					"name": "Import Synonyms (Bulk)",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Accept",
+								"value": "application/json"
+							},
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							},
+							{
+								"key": "Authorization",
+								"value": "Bearer {{authToken}}"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"synonyms\": [\n        {\n            \"term\": \"tablet\",\n            \"synonyms\": [\"ipad\", \"tab\", \"slate\"]\n        },\n        {\n            \"term\": \"smartwatch\",\n            \"synonyms\": [\"smart watch\", \"wearable\", \"apple watch\"]\n        }\n    ]\n}"
+						},
+						"url": {
+							"raw": "{{baseUrl}}/api/{{apiVersion}}/admin/search/synonyms/import",
+							"host": ["{{baseUrl}}"],
+							"path": ["api", "{{apiVersion}}", "admin", "search", "synonyms", "import"]
+						},
+						"description": "Bulk import search synonyms."
+					},
+					"response": []
+				},
+				{
+					"name": "Reset Search Stats",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Accept",
+								"value": "application/json"
+							},
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							},
+							{
+								"key": "Authorization",
+								"value": "Bearer {{authToken}}"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"type\": \"all\"\n}"
+						},
+						"url": {
+							"raw": "{{baseUrl}}/api/{{apiVersion}}/admin/search/reset-stats",
+							"host": ["{{baseUrl}}"],
+							"path": ["api", "{{apiVersion}}", "admin", "search", "reset-stats"]
+						},
+						"description": "Reset search statistics. Type can be: all, clicks, or conversions."
+					},
+					"response": []
+				},
+				{
+					"name": "Cleanup Old History",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Accept",
+								"value": "application/json"
+							},
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							},
+							{
+								"key": "Authorization",
+								"value": "Bearer {{authToken}}"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"days\": 90\n}"
+						},
+						"url": {
+							"raw": "{{baseUrl}}/api/{{apiVersion}}/admin/search/cleanup-history",
+							"host": ["{{baseUrl}}"],
+							"path": ["api", "{{apiVersion}}", "admin", "search", "cleanup-history"]
+						},
+						"description": "Delete search history older than specified days."
+					},
+					"response": []
+				}
+			],
+			"description": "Admin endpoints for managing search analytics, synonyms, and maintenance."
 		}
 	],
 	"event": [

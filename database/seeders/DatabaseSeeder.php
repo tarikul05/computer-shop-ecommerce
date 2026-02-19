@@ -41,6 +41,9 @@ class DatabaseSeeder extends Seeder
             
             // 8. Carts (depends on Users, Products)
             CartSeeder::class,
+            
+            // 9. Search (synonyms and popular searches)
+            SearchSeeder::class,
         ]);
 
         $this->command->newLine();
@@ -58,6 +61,8 @@ class DatabaseSeeder extends Seeder
                 ['Reviews', \App\Modules\Review\Models\Review::count()],
                 ['Wishlists', \App\Modules\Wishlist\Models\Wishlist::count()],
                 ['Carts', \App\Modules\Cart\Models\Cart::count()],
+                ['Search Synonyms', \App\Modules\Search\Models\SearchSynonym::count()],
+                ['Popular Searches', \App\Modules\Search\Models\PopularSearch::count()],
             ]
         );
         $this->command->newLine();
